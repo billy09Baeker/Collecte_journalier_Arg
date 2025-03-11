@@ -29,4 +29,6 @@ Pour l'Administrateur
 *Exportation de rapports financiers et statistiques.
 
 *Configuration des taux  et conditions de collecte.
+ok
+
 
