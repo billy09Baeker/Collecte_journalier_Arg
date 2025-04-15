@@ -15,18 +15,20 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        "phone number",
+        "role"
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -36,7 +38,7 @@ class User extends Authenticatable
     /**
      * Get the attributes that should be cast.
      *
-     * @return array<string, string>
+     * @return array
      */
     protected function casts(): array
     {
@@ -45,4 +47,26 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin(){
+        return $this->role == 'admin';
+
+    }
+    /**
+     * Check if user is a collector
+     */
+    public function isCollector(){
+        return $this->role == 'collector';
+    }
+
+    public function isClient(){
+        return $this->role=='client';
+    }
+    
+
+
+
 }
