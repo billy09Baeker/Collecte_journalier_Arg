@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RecuController extends Controller
 {
     /**
-     * Display a listing of the recus.
+     * Afficher une liste de tous les recus.
      */
     public function index()
     {
@@ -19,7 +19,7 @@ class RecuController extends Controller
     }
 
     /**
-     * Store a newly created recu in storage.
+     * Sauvegarder un nouveau recu dans la bd.
      */
     public function store(Request $request)
     {
@@ -35,7 +35,7 @@ class RecuController extends Controller
     }
 
     /**
-     * Display the specified recu.
+     * Zfficher le recu spécifié.
      */
     public function show($id)
     {
@@ -49,7 +49,7 @@ class RecuController extends Controller
     }
 
     /**
-     * Update the specified recu in storage.
+     * Modifier un recu existant.
      */
     public function update(Request $request, $id)
     {
@@ -71,7 +71,7 @@ class RecuController extends Controller
     }
 
     /**
-     * Remove the specified recu from storage.
+     * Supprimer un reçu existant.
      */
     public function destroy($id)
     {
