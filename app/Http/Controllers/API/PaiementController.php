@@ -92,4 +92,38 @@ class PaiementController extends Controller
 
         return response()->json(['message' => 'Paiement deleted successfully'], Response::HTTP_OK);
     }
+
+    /**
+     * Obtenir le paiement par l'ID du client.
+     */
+    public function paiementsParClient($clientId)
+    {
+        // Récupérer tous les paiements pour l'identifiant du client donné
+        $paiements = Paiement::where('client_id', $clientId)->get();
+
+        // Vérifier si le client a des paiements
+        if ($paiements->isEmpty()) {
+            return response()->json(['message' => 'Aucun paiement trouvé pour ce client'], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json($paiements, Response::HTTP_OK);
+    }
+
+    /**
+ * Affiche la liste des paiements pour les clients enregistrés par un collecteur spécifique.
+ */
+public function paiementsParCollecteur($collecteurId)
+{
+    // Récupérer tous les paiements pour lesquels l'identifiant du collecteur correspond à l'identifiant donné.
+    $paiements = Paiement::where('collecteur_id', $collecteurId)->get();
+
+    // Vérifier si le collecteur a des paiements
+    if ($paiements->isEmpty()) {
+        return response()->json(['message' => 'No paiements found for this collecteur'], Response::HTTP_NOT_FOUND);
+    }
+
+    return response()->json($paiements, Response::HTTP_OK);
 }
+}
+
+

@@ -29,10 +29,14 @@ class UtilisateurController extends Controller
         $validated = $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
+            'date_naissance' => 'nullable|date',
+            'lieu_naissance' => 'nullable|string',
+            'sexe' => 'nullable|string|in:Homme,Femme',
             'email' => 'required|email|unique:utilisateurs,email',
             'telephone' => 'required|string',
+            'adresse' => 'nullable|string',
             'password' => 'required|string|min:6',
-            'role' => 'nullable|string',
+            'role' => 'nullable|string|in:admin,client,collecteur',
             'added_by' => 'nullable|exists:utilisateurs,id'
         ]);
 
@@ -52,16 +56,19 @@ class UtilisateurController extends Controller
 
 
     $validated = $request->validate([
-
         'nom' => 'sometimes|string',
         'prenom' => 'sometimes|string',
+        'date_naissance' => 'nullable|date',
+        'lieu_naissance' => 'nullable|string',
+        'sexe' => 'nullable|string|in:Homme,Femme',
         'email' => 'sometimes|email|unique:utilisateurs,email,' . $id,
         'telephone' => 'sometimes|string',
+        'adresse' => 'nullable|string',
         'role' => 'sometimes|in:admin,collecteur,client',
-        'password' => 'sometimes|string|min:6', // Ajout de la validation pour le mot de passe
+        'password' => 'sometimes|string|min:6',
         'added_by' => 'nullable|exists:utilisateurs,id'
-
     ]);
+
 
 
     // Si le mot de passe est présent, le hacher
@@ -99,4 +106,37 @@ class UtilisateurController extends Controller
 
         return $collecteur->clientsAjoutes;
     }
+
+    /**
+ * Affiche la liste de tous les clients.
+ */
+public function listeClients()
+{
+    // Récupérer tous les utilisateurs ayant le rôle de « client ».
+    $clients = Utilisateur::where('role', 'client')->get();
+
+    // Vérifier s'il y a des clients
+    if ($clients->isEmpty()) {
+        return response()->json(['message' => 'Aucun client trouvé.'], 404);
+    }
+
+    return response()->json($clients, 200);
+}
+
+/**
+ * Affiche la liste de tous les collecteurs.
+ */
+public function listeCollecteurs()
+{
+    // Récupérer tous les utilisateurs ayant le rôle de « collecteur ».
+    $collecteurs = Utilisateur::where('role', 'collecteur')->get();
+
+    // Vérifier s'il y a des collecteurs
+    if ($collecteurs->isEmpty()) {
+        return response()->json(['message' => 'Aucun collecteur trouvé.'], 404);
+    }
+
+    return response()->json($collecteurs, 200);
+}
+
 }

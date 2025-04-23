@@ -19,6 +19,8 @@ Route::prefix('utilisateurs')->group(function () {
     Route::delete('/{id}', [UtilisateurController::class, 'destroy']);
 
     Route::get('/{id}/clients', [UtilisateurController::class, 'clientsParCollecteur']);
+    Route::get('/clients', [UtilisateurController::class, 'listeClients']);
+    Route::get('/collecteurs', [UtilisateurController::class, 'listeCollecteurs']);
 });
 
 Route::prefix('paiements')->group(function () {
@@ -27,6 +29,8 @@ Route::prefix('paiements')->group(function () {
     Route::post('/', [PaiementController::class, 'store']);
     Route::put('/{id}', [PaiementController::class, 'update']);
     Route::delete('/{id}', [PaiementController::class, 'destroy']);
+    Route::get('/client/{clientId}', [PaiementController::class, 'paiementsParClient']);
+    Route::get('paiements/collecteur/{collecteurId}', [PaiementController::class, 'paiementsParCollecteur']);
 });
 
 Route::prefix('recus')->group(function () {
