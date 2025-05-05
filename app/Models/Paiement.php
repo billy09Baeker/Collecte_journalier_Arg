@@ -12,11 +12,11 @@ class Paiement extends Model
         'mode_paiement',
         'client_id',
         'collecteur_id',
-        'methode_paiement',
+        'status',
     ];
 
     public $timestamps = true;
-    
+
     public function client()
     {
         return $this->belongsTo(Utilisateur::class, 'client_id');

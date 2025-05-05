@@ -8,7 +8,7 @@ use App\Models\Utilisateur;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
-class UtilisateurController extends Controller
+class UtilisateurControllerApi extends Controller
 {
     public function index()
     {

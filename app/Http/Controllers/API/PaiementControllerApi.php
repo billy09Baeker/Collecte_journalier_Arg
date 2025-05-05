@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 //use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response;
 
-class PaiementController extends Controller
+class PaiementControllerApi extends Controller
 {
     /**
      * Display a listing of the paiements.

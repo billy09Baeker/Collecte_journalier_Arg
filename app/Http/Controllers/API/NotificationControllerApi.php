@@ -7,7 +7,7 @@ use App\Models\Notification;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class NotificationController extends Controller
+class NotificationControllerApi extends Controller
 {
     /**
      * Display a listing of the notifications.

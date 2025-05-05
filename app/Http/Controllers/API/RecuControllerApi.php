@@ -7,7 +7,7 @@ use App\Models\Recu;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RecuController extends Controller
+class RecuControllerApi extends Controller
 {
     /**
      * Afficher une liste de tous les recus.
