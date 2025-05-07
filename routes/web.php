@@ -8,7 +8,7 @@ use App\Http\Controllers\API\NotificationControllerApi;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PaiementController;
-
+use App\Models\Utilisateur;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
@@ -59,18 +59,16 @@ Route::get('/login', function () {
     return view('login');
 })->name('login')->middleware('guest');
 
+
 Route::get('/register', function () {
     return view('register');
-})->name('register');
+})->name('register')->middleware('guest');
 
 
 Route::post('/register', [UtilisateurController::class, 'register'])->name('register');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/home', function () {
-        return view('admin.home');
-    })->name('admin.home');
 
 
 
@@ -80,9 +78,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('/client/home', function () {
-        return view('client.home');
-    })->name('client.home');
+    Route::get('/client/home', [UtilisateurController::class, 'dashboardClient'])->name('client.home');
 
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -90,4 +86,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/client/paiements', [PaiementController::class, 'index'])->name('client.paiements');
 
     Route::post('/paiements/store', [PaiementController::class, 'storePaiement'])->name('paiements.store');
+
+
+
+    Route::get('/admin/dashboard', [UtilisateurController::class, 'dashboardAdmin'])->name('admin.dashboard');
+
+    Route::get('/admin', [UtilisateurController::class, 'gestionCollecteur'])->name('admin.collecteurs');
+
+    Route::post('/admin/collecteur/store', [UtilisateurController::class, 'storeCollecteur'])->name('admin.collecteur.store');
+
+    Route::get('/admin/collecteur/edit/{id}', [UtilisateurController::class, 'editCollecteur'])->name('admin.collecteur.edit');
+
+    Route::put('/admin/collecteur/update/{id}', [UtilisateurController::class, 'updateCollecteur'])->name('admin.collecteur.update');
+
+    Route::delete('/admin/collecteur/delete/{id}', [UtilisateurController::class, 'destroyCollecteur'])->name('collecteurs.destroy');
+
 });

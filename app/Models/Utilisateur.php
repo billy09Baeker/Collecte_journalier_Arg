@@ -60,4 +60,6 @@ class Utilisateur extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
+
+
 }

@@ -64,11 +64,8 @@ class AuthController extends Controller
             return redirect()->route('collecteur.dashboard');
         case 'client':
             // Récupère l'ID de l'utilisateur connecté
-            $user_id = session('user_id');
-            $totalPaiements = Paiement::where('client_id', $user_id)
-                        ->where('status', 'confirmé') // Optionnel : filtre sur les paiements validés
-                        ->sum('montant');
-                        return redirect()->route('client.home')->with('totalPaiements', $totalPaiements)->with('echeance_montant', $echeance_montant)->with('echeance_date', $echeance_date)->with('lastPayment_montant', $lastPayment_montant)->with('lastPayment_date', $lastPayment_date);
+            return redirect()->route('client.home');
+
         default:
             return redirect()->intended('home');
     }
