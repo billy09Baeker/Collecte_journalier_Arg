@@ -41,7 +41,7 @@ class Utilisateur extends Authenticatable
         $this->attributes['password'] = bcrypt($value);
     }
 
-    public function clientsAjoutes()
+    public function clients()
     {
         return $this->hasMany(Utilisateur::class, 'added_by')->where('role', 'client');
     }

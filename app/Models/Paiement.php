@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Paiement extends Model
 {
+
+
+    protected $casts = [
+        'date_echeance' => 'date',
+    ];
+    
     protected $fillable = [
         'montant',
         'date_paiement',

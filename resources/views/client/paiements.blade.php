@@ -1,110 +1,114 @@
-<!-- filepath: d:\CSI 3\SEMESTRE 2\DEVELOPPEMENT BACK-END PHP\Collect_project\collecte-journaliere\resources\views\client\paiements.blade.php -->
-@extends("client.welcome")
-@section("contenu")
+@extends('client.welcome')
 
-<div class="container mt-4">
-    <!-- Ligne pour le bouton "Effectuer un Paiement" -->
-    <div class="row mb-4">
-        <div class="col-md-12 text-center">
-            <button class="btn btn-primary" id="openModalBtn"><i class="bi bi-plus-circle"></i> Effectuer un Paiement</button>
+@section('contenu')
+<div class="container py-5">
+    <h1 class="text-center mb-5 display-5 fw-bold">Mes Paiements</h1>
+
+    <!-- Informations sur l'échéance -->
+    @if($echeance)
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Informations sur l'Échéance</h5>
+            <p><strong>Montant Journalier :</strong> {{ number_format($echeance->montant_journalier, 2, ',', ' ') }} FCFA</p>
+            <p><strong>Date d'Échéance :</strong> {{ $echeance->date_echeance }}</p>
+            <p><strong>Mode de Paiement 1 :</strong> {{ $echeance->mode_paiement_1 ?? 'Non défini' }}</p>
+            <p><strong>Mode de Paiement 2 :</strong> {{ $echeance->mode_paiement_2 ?? 'Non défini' }}</p>
+            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#paiementModal">Effectuer Paiement</button>
         </div>
     </div>
+    @else
+    <p class="text-center text-muted">Aucune échéance définie.</p>
+    @endif
 
-    <!-- Tableau pour l'historique des dernières transactions -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-clock-history"></i> Historique des Dernières Transactions</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Montant</th>
-                                <th>Mode de Paiement</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($paiements as $paiement)
-                            <tr>
-                                <td>{{ $paiement->date_paiement }}</td>
-                                <td>{{ number_format($paiement->montant, 0, ',', ' ') }} FCFA</td>
-                                <td>{{ $paiement->mode_paiement }}</td>
-                                <td>{{ ucfirst($paiement->status) }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary"
+    <!-- Filtre des paiements -->
+    <div class="mb-4">
+        <form action="{{ route('client.mes-paiements') }}" method="GET" class="d-flex justify-content-end">
+            <select name="status" class="form-select w-auto me-2">
+                <option value="">Tous</option>
+                <option value="confirmé" {{ request('status') == 'confirmé' ? 'selected' : '' }}>Confirmés</option>
+                <option value="en attente" {{ request('status') == 'en attente' ? 'selected' : '' }}>En Attente</option>
+                <option value="annulé" {{ request('status') == 'annulé' ? 'selected' : '' }}>Annulés</option>
+            </select>
+            <button type="submit" class="btn btn-secondary">Filtrer</button>
+        </form>
+    </div>
 
-                                        @if($paiement->status !== 'confirmé') disabled @endif>
-
-                                        Générer reçu
-
-                                    </button>
-                                </td>
-
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center">Aucune transaction trouvée.</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <!-- Historique des paiements -->
+    <h3 class="mb-3">Historique des Paiements</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date de Paiement</th>
+                    <th>Montant (FCFA)</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($paiements as $paiement)
+                <tr>
+                    <td>{{ $paiement->date_paiement }}</td>
+                    <td>{{ number_format($paiement->montant, 0, ',', ' ') }}</td>
+                    <td>{{ ucfirst($paiement->status) }}</td>
+                    <td>
+                        @if($paiement->status === 'confirmé')
+                            {{-- <form action="{{ route('client.paiements.confirmer', $paiement->id) }}" method="POST" style="display:inline-block;"> --}}
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-success" title="Confirmer">
+                                    <i class="bi bi-check-circle"></i> Telecharger reçu
+                                </button>
+                            {{-- </form> --}}
+                        @endif
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="3" class="text-center text-muted">Aucun paiement trouvé.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 
 <!-- Modal pour effectuer un paiement -->
-<div class="modal" id="paiementModal" style="display: none;">
+<div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-cash"></i> Effectuer un Paiement</h5>
-                <button type="button" class="btn-close" id="closeModalBtn"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('paiements.store') }}" method="POST">
-                    @csrf
+            <form action="{{ route('client.paiements.store') }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paiementModalLabel">Effectuer un Paiement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Montant Journalier :</strong> {{ number_format($echeance->montant_journalier, 2, ',', ' ') }} FCFA</p>
+                    <p><strong>Date d'Échéance :</strong> {{ $echeance->date_echeance }}</p>
+                    <p class="text-muted">Scannez l'un des QR codes ci-dessous pour effectuer votre paiement :</p>
                     <div class="mb-3">
-                        <label for="montant" class="form-label">Montant (FCFA)</label>
-                        <input type="number" class="form-control" id="montant" name="montant" value="{{$echeances->first()->montant_journalier ?? '' }}" disabled>
+                        <p><strong>Mode de Paiement 1 :</strong> {{ $echeance->mode_paiement_1 ?? 'Non défini' }}</p>
+                        @if($echeance->qr_code_1)
+                            <img src="{{ asset('storage/' . $echeance->qr_code_1) }}" alt="QR Code 1" style="width: 150px;">
+                        @else
+                            <p class="text-muted">QR Code 1 non disponible.</p>
+                        @endif
                     </div>
                     <div class="mb-3">
-                        <label for="mode_paiement" class="form-label">Mode de Paiement</label>
-                        <select class="form-select" id="mode_paiement" name="mode_paiement" required>
-
-                            <option value="Mobile Money">Mobile Money</option>
-                            <option value="Chèque">QR Code</option>
-                        </select>
+                        <p><strong>Mode de Paiement 2 :</strong> {{ $echeance->mode_paiement_2 ?? 'Non défini' }}</p>
+                        @if($echeance->qr_code_2)
+                            <img src="{{ asset('storage/' . $echeance->qr_code_2) }}" alt="QR Code 2" style="width: 150px;">
+                        @else
+                            <p class="text-muted">QR Code 2 non disponible.</p>
+                        @endif
                     </div>
-                    <input type="hidden" name="client_id" value="{{ $client->id }}">
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Valider</button>
-                </form>
-            </div>
+                    <p class="text-muted">Après avoir effectué le paiement, cliquez sur le bouton ci-dessous pour confirmer.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Paiement Effectué</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<!-- Scripts pour gérer l'ouverture et la fermeture du modal -->
-<script>
-    document.getElementById('openModalBtn').addEventListener('click', function () {
-        document.getElementById('paiementModal').style.display = 'block';
-    });
-
-    document.getElementById('closeModalBtn').addEventListener('click', function () {
-        document.getElementById('paiementModal').style.display = 'none';
-    });
-
-    // Fermer le modal si l'utilisateur clique en dehors
-    window.addEventListener('click', function (event) {
-        const modal = document.getElementById('paiementModal');
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-</script>
-
 @endsection

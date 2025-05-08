@@ -28,7 +28,7 @@
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('client.paiements') }}"><i class="bi bi-receipt me-1"></i> Paiements</a>
+                <a class="nav-link" href="{{ route('client.mes-paiements') }}"><i class="bi bi-receipt me-1"></i> Paiements</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#"><i class="bi bi-bell me-1"></i> Notifications</a>

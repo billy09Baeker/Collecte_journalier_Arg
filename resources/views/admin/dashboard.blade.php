@@ -59,7 +59,7 @@
                             </div>
                             <h5 class="card-title fw-semibold">Gestion des Clients</h5>
                             <p class="card-text text-muted">Gérer les informations des clients.</p>
-                            <a href="#" class="btn btn-outline-success btn-sm mt-2">Gérer</a>
+                            <a href="{{route('admin.clients')}}" class="btn btn-outline-success btn-sm mt-2">Gérer</a>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                             </div>
                             <h5 class="card-title fw-semibold">Suivi des Transactions</h5>
                             <p class="card-text text-muted">Consulter et suivre les paiements effectués.</p>
-                            <a href="#" class="btn btn-outline-warning btn-sm mt-2">Suivre</a>
+                            <a href="{{route('admin.suivi-paiements')}}" class="btn btn-outline-warning btn-sm mt-2">Suivre</a>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                             </div>
                             <h5 class="card-title fw-semibold">Performances</h5>
                             <p class="card-text text-muted">Analyser les performances des collecteurs.</p>
-                            <a href="#" class="btn btn-outline-danger btn-sm mt-2">Analyser</a>
+                            <a href="{{route('admin.performances')}}" class="btn btn-outline-danger btn-sm mt-2">Analyser</a>
                         </div>
                     </div>
                 </div>

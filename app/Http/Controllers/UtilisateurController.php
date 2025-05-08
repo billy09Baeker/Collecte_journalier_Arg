@@ -6,6 +6,7 @@ use App\Models\Echeance;
 use Illuminate\Http\Request;
 use App\Models\Utilisateur;
 use App\Models\Paiement;
+use Illuminate\Support\Facades\Auth;
 
 class UtilisateurController extends Controller
 {
@@ -99,35 +100,38 @@ class UtilisateurController extends Controller
 
 
 
+
     public function dashboardClient()
-{
-    $user_id = session('user_id');
+    {
+        $user_id = Auth::id(); // Utiliser l'ID de l'utilisateur connecté via Auth
 
-    // Total des paiements confirmés
-    $totalPaiements = Paiement::where('client_id', $user_id)
-                        ->where('status', 'confirmé')
-                        ->sum('montant');
+        // Récupérer les données nécessaires
+        $totalPaiements = Paiement::where('client_id', $user_id)
+            ->where('status', 'confirmé')
+            ->sum('montant');
 
-    // Dernier paiement confirmé
-    $lastPayment = Paiement::where('client_id', $user_id)
-                        ->where('status', 'confirmé')
-                        ->latest()
-                        ->first();
+        $lastPayment = Paiement::where('client_id', $user_id)
+            ->where('status', 'confirmé')
+            ->latest('date_paiement') // Trier par date de paiement
+            ->first();
 
-    // Prochaine échéance à venir depuis la table échéances
-    $echeance = Echeance::whereDate('date_echeance', '>=', now())
-                        ->orderBy('date_echeance', 'asc')
-                        ->first();
+        $echeance = Echeance::whereDate('date_echeance', '>=', now())
+            ->orderBy('date_echeance', 'asc')
+            ->first();
 
-    return view('client.home', [
-        'totalPaiements' => $totalPaiements,
-        'lastPayment_montant' => $lastPayment->montant ?? 0,
-        'lastPayment_date' => optional($lastPayment?->created_at)->format('d/m/Y') ?? '-',
-
-        'echeance_montant' => $echeance->montant_journalier ?? 0,
-        'echeance_date' => optional($echeance?->date_echeance)->format('d/m/Y') ?? '-',
-    ]);
-}
+        // Préparer les données pour la vue
+        return view('client.home', [
+            'totalPaiements' => $totalPaiements,
+            'lastPayment_montant' => $lastPayment->montant ?? 0,
+            'lastPayment_date' => optional($lastPayment)->date_paiement
+    ? \Carbon\Carbon::parse($lastPayment->date_paiement)->format('d/m/Y')
+    : '-',
+            'echeance_montant' => $echeance->montant_journalier ?? 0,
+            'echeance_date' => optional($echeance)->date_echeance
+            ? \Carbon\Carbon::parse($echeance->date_echeance)->format('d/m/Y')
+            : '-',
+        ]);
+    }
 
     public function gestionCollecteur()
     {
@@ -184,41 +188,37 @@ public function updateCollecteur(Request $request, $id)
 }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroyClient($id)
     {
-        //
+        $client = Utilisateur::findOrFail($id);
+
+        // Optionnel : vérifier le rôle avant suppression
+        if ($client->role !== 'client') {
+            return redirect()->back()->with('error', 'Cet utilisateur n’est pas un client.');
+        }
+
+        $client->delete();
+
+        return redirect()->route('  admin.client')->with('success', 'Client supprimé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function getListClients()
     {
-        //
+        // Récupérer tous les clients
+        $clients = Utilisateur::where('role', 'client')
+            ->with(['paiements' => function ($query) {
+                $query->where('status', 'confirmé');
+            }])
+            ->get()
+            ->map(function ($client) {
+                // Calculer le solde (somme des paiements confirmés)
+                $client->solde = $client->paiements->sum('montant');
+                return $client;
+            });
+
+        return view('admin.client', compact('clients'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroyCollecteur($id)
     {
         $collecteur = Utilisateur::findOrFail($id);
@@ -231,5 +231,75 @@ public function updateCollecteur(Request $request, $id)
         $collecteur->delete();
 
         return redirect()->route('collecteurs.index')->with('success', 'Collecteur supprimé avec succès.');
+    }
+
+
+    public function getDetailsClient($id)
+    {
+        // Récupérer le client par son ID
+        $client = Utilisateur::where('role', 'client')->findOrFail($id);
+
+        // Charger les paiements du client
+        $paiements = $client->paiements()->orderBy('date_paiement', 'desc')->get();
+
+        return view('admin.client-details', compact('client', 'paiements'));
+    }
+
+
+
+
+    public function getPerformanceCollecteur()
+    {
+        // Récupérer tous les collecteurs
+        $collecteurs = Utilisateur::where('role', 'collecteur')
+            ->with(['clients.paiements' => function ($query) {
+                $query->where('status', 'confirmé'); // Filtrer uniquement les paiements confirmés
+            }])
+            ->get()
+            ->map(function ($collecteur) {
+                // Calculer le nombre de clients et le montant total collecté
+                $collecteur->nombre_clients = $collecteur->clients->count();
+                $collecteur->montant_total_collecte = $collecteur->clients->flatMap->paiements->sum('montant');
+                return $collecteur;
+            });
+
+        return view('admin.performances', compact('collecteurs'));
+    }
+
+
+
+    public function getDetailsPerformance($id)
+    {
+        // Récupérer le collecteur par son ID
+        $collecteur = Utilisateur::where('role', 'collecteur')->findOrFail($id);
+
+        // Récupérer les clients ajoutés par ce collecteur
+        $clients = $collecteur->clients()
+            ->with(['paiements' => function ($query) {
+                $query->where('status', 'confirmé'); // Filtrer uniquement les paiements confirmés
+            }])
+            ->get()
+            ->map(function ($client) {
+                // Calculer le nombre de paiements confirmés et le montant total des paiements confirmés
+                $client->nombre_paiements_confirmes = $client->paiements->count();
+                $client->montant_total_paiements = $client->paiements->sum('montant');
+                return $client;
+            });
+
+        return view('admin.collecteur-details', compact('collecteur', 'clients'));
+    }
+
+
+    public function dashboardCollecteur()
+    {
+        $collecteur_id = Auth::id(); // Récupérer l'ID du collecteur connecté
+
+        // Récupérer les clients enregistrés par le collecteur
+        $clients = Utilisateur::where('added_by', $collecteur_id)
+            ->where('role', 'client')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('collecteur.dashboard', compact('clients'));
     }
 }

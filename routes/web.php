@@ -7,6 +7,7 @@ use App\Http\Controllers\API\RecuControllerApi;
 use App\Http\Controllers\API\NotificationControllerApi;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EcheanceController;
 use App\Http\Controllers\PaiementController;
 use App\Models\Utilisateur;
 
@@ -83,7 +84,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/client/paiements', [PaiementController::class, 'index'])->name('client.paiements');
+
+
+
+    Route::post('/client/paiements/store', [PaiementController::class, 'storePaiement'])->name('client.paiements.store');
+
+
+
+    Route::get('/client/mes-paiements', [PaiementController::class, 'getMesPaiement'])->name('client.mes-paiements');
+
 
     Route::post('/paiements/store', [PaiementController::class, 'storePaiement'])->name('paiements.store');
 
@@ -101,4 +110,44 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('/admin/collecteur/delete/{id}', [UtilisateurController::class, 'destroyCollecteur'])->name('collecteurs.destroy');
 
+    Route::get('/admin/clients', [UtilisateurController::class, 'getListClients'])->name('admin.clients');
+
+
+    Route::delete('/admin/client/delete/{id}', [UtilisateurController::class, 'destroyCollecteur'])->name('client.destroy');
+
+
+    Route::get('/admin/clients/{id}/details', [UtilisateurController::class, 'getDetailsClient'])->name('client.details');
+
+    Route::get('/admin/suivi-paiements', [PaiementController::class, 'getSuiviPaiement'])->name('admin.suivi-paiements');
+
+
+    Route::get('/admin/performances', [UtilisateurController::class, 'getPerformanceCollecteur'])->name('admin.performances');
+
+
+
+    Route::get('/admin/collecteurs/{id}/details', [UtilisateurController::class, 'getDetailsPerformance'])->name('collecteur.details');
+
+
+
+
+
+    Route::get('/admin/parametres', [EcheanceController::class, 'getParametre'])->name('admin.parametres');
+
+
+    Route::post('/admin/parametres/update', [EcheanceController::class, 'updateEcheance'])->name('admin.parametres.update');
+
+
+    Route::post('/admin/parametres/store', [EcheanceController::class, 'storeEcheance'])->name('admin.parametres.store');
+
+
+    Route::post('/paiements/{id}/confirmer', [PaiementController::class, 'confirmerPaiement'])->name('paiement.confirmer');
+
+
+    Route::post('/paiements/{id}/annuler', [PaiementController::class, 'annulerPaiement'])->name('paiement.annuler');
+
+
+
+
+
+    Route::get('/collecteur/dashboard', [UtilisateurController::class, 'dashboardCollecteur'])->name('collecteur.dashboard');
 });
