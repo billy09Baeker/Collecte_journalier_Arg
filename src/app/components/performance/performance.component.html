@@ -51,7 +51,7 @@
               <td>{{ collecteur.zoneCouverture }}</td>
               <td>{{ collecteur.montantTotal | currency:'EUR':'symbol':'1.2-2' }}</td>
               <td>{{ collecteur.nombreClients }}</td>
-              <td>{{ calculerMoyenneParClient(collecteur) | currency:'EUR':'symbol':'1.2-2' }}</td>
+              <td>{{ calculerMoyenneParClient(collecteur) | currency:'FCFA':'symbol':'1.2-2' }}</td>
               <td>{{ calculerPourcentageContribution(collecteur) | number:'1.1-1' }}%</td>
               <td>
                 <span class="badge" [ngClass]="getPerformanceClass(collecteur.performance)">
