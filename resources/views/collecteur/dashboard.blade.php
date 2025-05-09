@@ -7,7 +7,7 @@
 
     <!-- Boutons d'actions -->
     <div class="d-flex justify-content-center mb-4">
-        <a href="" class="btn btn-primary me-3">Enregistrer Paiement</a>
+        <a href="{{ route('collecteur.paiements') }}" class="btn btn-primary me-3">Enregistrer Paiement</a>
         <a href="" class="btn btn-success me-3">Ajouter Client</a>
         <a href="" class="btn btn-warning">Performance</a>
     </div>

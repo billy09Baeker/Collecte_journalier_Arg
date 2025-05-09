@@ -156,7 +156,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/collecteur/paiements', [PaiementController::class, 'getPaiementByCollecteur'])->name('collecteur.paiements');
 
 
-    Route::post('/collecteur/paiements/store', [PaiementController::class, 'storePaiement'])->name('collecteur.paiements.store');
+    Route::post('/collecteur/paiements/store', [PaiementController::class, 'storePaiementByCollecteur'])->name('collecteur.paiements.store');
 
 
 

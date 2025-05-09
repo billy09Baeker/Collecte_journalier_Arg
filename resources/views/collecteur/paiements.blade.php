@@ -10,7 +10,8 @@
     <div class="card mb-4">
         <div class="card-body">
             <p><strong>Montant de l'Échéance :</strong> {{ number_format($echeance->montant_journalier, 2, ',', ' ') }} FCFA</p>
-            <p><strong>Date de l'Échéance :</strong> {{ $echeance->date_echeance->format('d/m/Y') }}</p>
+            <p><strong>Date de l'Échéance :</strong> {{ \Carbon\Carbon::parse($echeance->date_echeance)->format('d/m/Y') }}</p>
+
         </div>
     </div>
     @else
@@ -58,7 +59,8 @@
                 <tr>
                     <td>{{ $paiement->client->nom }} {{ $paiement->client->prenom }}</td>
                     <td>{{ number_format($paiement->montant, 2, ',', ' ') }}</td>
-                    <td>{{ $paiement->date_paiement->format('d/m/Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') }}</td>
+
                     <td>{{ ucfirst($paiement->mode_paiement) }}</td>
                     <td>
                         <a href="{{ route('collecteur.paiements.recu', $paiement->id) }}" class="btn btn-sm btn-secondary">Télécharger Reçu</a>
