@@ -57,6 +57,12 @@
             </tbody>
         </table>
     </div>
+    <!-- Liens de pagination -->
+    @if ($clients->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $clients->links() }}
+    </div>
+    @endif
 </div>
 
 

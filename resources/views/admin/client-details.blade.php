@@ -41,5 +41,11 @@
             </tbody>
         </table>
     </div>
+
+    @if ($paiements->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $paiements->links() }}
+    </div>
+@endif
 </div>
 @endsection

@@ -171,4 +171,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/collecteur/clients/store', [UtilisateurController::class, 'storeClient'])->name('collecteur.client.store');
 
     Route::put('/collecteur/clients/add/{id}', [UtilisateurController::class, 'updateClient'])->name('collecteur.client.update');
+
+
+    Route::get('/collecteur/performances', [UtilisateurController::class, 'mesPerformances'])->name('collecteur.performances');
 });

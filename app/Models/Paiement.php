@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Paiement extends Model
 {
+    use HasFactory;
 
 
     protected $casts = [
         'date_echeance' => 'date',
     ];
-    
+
     protected $fillable = [
         'montant',
         'date_paiement',

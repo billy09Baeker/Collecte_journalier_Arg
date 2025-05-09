@@ -56,6 +56,19 @@
 @endif
 
 
+{{-- <!-- Filtre des paiements -->
+<div class="mb-4">
+    <form action="{{ route('admin.suivi-paiements') }}" method="GET" class="d-flex justify-content-end">
+        <select name="status" class="form-select w-auto me-2">
+            <option value="">Tous</option>
+            <option value="confirmé" {{ request('status') == 'confirmé' ? 'selected' : '' }}>Confirmés</option>
+            <option value="en attente" {{ request('status') == 'en attente' ? 'selected' : '' }}>En Attente</option>
+            <option value="annulé" {{ request('status') == 'annulé' ? 'selected' : '' }}>Annulés</option>
+        </select>
+        <button type="submit" class="btn btn-secondary">Filtrer</button>
+    </form>
+</div> --}}
+
     <!-- Tableau des derniers paiements -->
     <h3 class="mb-4">Liste des Derniers Paiements</h3>
     <div class="table-responsive">
@@ -116,6 +129,12 @@
             </tbody>
         </table>
     </div>
+
+    @if ($paiements->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $paiements->links() }}
+    </div>
+@endif
 
 </div>
 

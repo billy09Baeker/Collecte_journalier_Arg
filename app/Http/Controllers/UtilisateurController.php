@@ -135,7 +135,7 @@ class UtilisateurController extends Controller
 
     public function gestionCollecteur()
     {
-        $collecteurs = Utilisateur::where('role', 'collecteur')->get();
+        $collecteurs = Utilisateur::where('role', 'collecteur')->paginate(10);
         return view('admin.collecteurs', compact('collecteurs'));
     }
 
@@ -203,21 +203,22 @@ public function updateCollecteur(Request $request, $id)
     }
 
     public function getListClients()
-    {
-        // Récupérer tous les clients
-        $clients = Utilisateur::where('role', 'client')
-            ->with(['paiements' => function ($query) {
-                $query->where('status', 'confirmé');
-            }])
-            ->get()
-            ->map(function ($client) {
-                // Calculer le solde (somme des paiements confirmés)
-                $client->solde = $client->paiements->sum('montant');
-                return $client;
-            });
+{
+    // Récupérer les clients avec pagination
+    $clients = Utilisateur::where('role', 'client')
+        ->with(['paiements' => function ($query) {
+            $query->where('status', 'confirmé');
+        }])
+        ->paginate(10); // Important : faire cela AVANT map()
 
-        return view('admin.client', compact('clients'));
+    // Ajouter solde manuellement
+    foreach ($clients as $client) {
+        $client->solde = $client->paiements->sum('montant');
     }
+
+    return view('admin.client', compact('clients'));
+}
+
 
     public function destroyCollecteur($id)
     {
@@ -240,7 +241,7 @@ public function updateCollecteur(Request $request, $id)
         $client = Utilisateur::where('role', 'client')->findOrFail($id);
 
         // Charger les paiements du client
-        $paiements = $client->paiements()->orderBy('date_paiement', 'desc')->get();
+        $paiements = $client->paiements()->orderBy('date_paiement', 'desc')->paginate(10);
 
         return view('admin.client-details', compact('client', 'paiements'));
     }
@@ -298,7 +299,7 @@ public function updateCollecteur(Request $request, $id)
         $clients = Utilisateur::where('added_by', $collecteur_id)
             ->where('role', 'client')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         return view('collecteur.dashboard', compact('clients'));
     }
@@ -341,7 +342,7 @@ public function updateCollecteur(Request $request, $id)
 
 public function getClient()
     {
-        $clients = Utilisateur::where('role', 'client')->get();
+        $clients = Utilisateur::where('role', 'client')->paginate(10);
         return view('collecteur.clients', compact('clients'));
     }
 
@@ -382,4 +383,47 @@ public function getClient()
         return redirect()->route('admin.collecteurs')->with('success', 'Client mis à jour avec succès.');
     }
 
+
+    public function mesPerformances(Request $request)
+    {
+        $collecteur_id = Auth::id(); // Récupérer l'ID du collecteur connecté
+
+        // Nombre total de clients enregistrés par le collecteur
+        $totalClients = Utilisateur::where('added_by', $collecteur_id)
+            ->where('role', 'client')
+            ->count();
+
+        // Montant total des paiements confirmés des clients du collecteur
+        $montantTotal = Paiement::where('collecteur_id', $collecteur_id)
+            ->where('status', 'confirmé')
+            ->sum('montant');
+
+        // Filtrer les collectes en fonction des critères (jour, mois, année)
+        $query = Paiement::where('collecteur_id', $collecteur_id)
+            ->where('status', 'confirmé');
+
+        if ($request->filled('jour')) {
+            $query->whereDate('date_paiement', $request->jour);
+        }
+
+        if ($request->filled('mois')) {
+            $query->whereMonth('date_paiement', $request->mois);
+        }
+
+        if ($request->filled('annee')) {
+            $query->whereYear('date_paiement', $request->annee);
+        }
+
+        $collectes = $query->orderBy('date_paiement', 'desc')->paginate(10);
+
+        // Préparer les données pour le graphique
+        $graphiqueData = Paiement::selectRaw('DATE(date_paiement) as date, SUM(montant) as total')
+            ->where('collecteur_id', $collecteur_id)
+            ->where('status', 'confirmé')
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return view('collecteur.performances', compact('totalClients', 'montantTotal', 'collectes', 'graphiqueData'));
+    }
 }

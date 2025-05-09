@@ -9,14 +9,14 @@
     <div class="d-flex justify-content-center mb-4">
         <a href="{{ route('collecteur.paiements') }}" class="btn btn-primary me-3">Enregistrer Paiement</a>
         <a href="{{ route('collecteur.clients') }}" class="btn btn-success me-3">Ajouter Client</a>
-        <a href="" class="btn btn-warning">Performance</a>
+        <a href="{{route('collecteur.performances')}}" class="btn btn-warning">Performance</a>
     </div>
 
     <!-- Liste des clients -->
     <h3 class="mb-3">Liste des Clients</h3>
     <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
                 <tr>
                     <th>Nom</th>
                     <th>Prénom</th>
@@ -27,20 +27,30 @@
             </thead>
             <tbody>
                 @forelse($clients as $client)
-                <tr>
-                    <td>{{ $client->nom }}</td>
-                    <td>{{ $client->prenom }}</td>
-                    <td>{{ $client->email }}</td>
-                    <td>{{ $client->telephone }}</td>
-                    <td>{{ $client->created_at->format('d/m/Y') }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ $client->nom }}</td>
+                        <td>{{ $client->prenom }}</td>
+                        <td>{{ $client->email }}</td>
+                        <td>{{ $client->telephone }}</td>
+                        <td>{{ \Carbon\Carbon::parse($client->created_at)->format('d/m/Y') }}</td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="5" class="text-center text-muted">Aucun client enregistré.</td>
-                </tr>
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Aucun client enregistré.</td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
+
+    <!-- Liens de pagination -->
+    @if ($clients->hasPages())
+        <div class="d-flex justify-content-center mt-4">
+            {{ $clients->links() }}
+        </div>
+    @endif
+
+
+
 </div>
 @endsection

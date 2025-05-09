@@ -54,7 +54,7 @@
                     <td>
                         @if($paiement->status === 'confirmé')
                             {{-- <form action="{{ route('client.paiements.confirmer', $paiement->id) }}" method="POST" style="display:inline-block;"> --}}
-                                
+
                                 <td>
                                     <a href="{{ route('collecteur.paiements.recu', $paiement->id) }}" class="btn btn-sm btn-secondary">Télécharger Reçu</a>
                                 </td>
@@ -69,6 +69,11 @@
             </tbody>
         </table>
     </div>
+    @if ($paiements->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $paiements->links() }}
+    </div>
+@endif
 </div>
 
 <!-- Modal pour effectuer un paiement -->

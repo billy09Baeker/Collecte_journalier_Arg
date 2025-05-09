@@ -32,7 +32,7 @@ class PaiementController extends Controller
         if ($status) {
             $paiementsQuery->where('status', $status);
         }
-        $paiements = $paiementsQuery->get();
+        $paiements = $paiementsQuery->paginate(10);
 
         return view('client.paiements', compact('echeance', 'paiements', 'status'));
     }
@@ -67,19 +67,21 @@ class PaiementController extends Controller
      */
 
 
-     public function getSuiviPaiement($status = null)
+     public function getSuiviPaiement(Request $request, $status = null)
      {
          // Compteurs pour les paiements
          $totalPaiementsConfirmes = Paiement::where('status', 'confirmé')->count();
          $totalPaiementsEnattentes = Paiement::where('status', 'en attente')->count();
          $totalPaiementsAnnules = Paiement::where('status', 'annulé')->count();
 
+         $status = $request->query('status'); 
+
          // Filtrer les paiements en fonction du statut
          $paiementsQuery = Paiement::with('client')->orderBy('date_paiement', 'desc');
          if ($status) {
              $paiementsQuery->where('status', $status);
          }
-         $paiements = $paiementsQuery->get();
+         $paiements = $paiementsQuery->paginate(10); // Pagination de 10 paiements par page
 
          return view('admin.suivi-transaction', compact(
              'totalPaiementsConfirmes',
@@ -141,7 +143,7 @@ class PaiementController extends Controller
         // Récupérer tous les paiements effectués par le collecteur
         $paiements = Paiement::where('collecteur_id', $collecteur_id)
             ->orderBy('date_paiement', 'desc')
-            ->get();
+            ->paginate(10); // Pagination de 10 paiements par page
 
         return view('collecteur.paiements', compact('clients', 'echeance', 'paiements'));
     }

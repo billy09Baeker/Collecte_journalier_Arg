@@ -19,7 +19,7 @@
                     <th>Sexe</th>
                     <th>Email</th>
                     <th>Téléphone</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -110,6 +110,11 @@
             </tbody>
         </table>
     </div>
+    @if ($clients->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $clientsw->links() }}
+    </div>
+@endif
 </div>
 
 

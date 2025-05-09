@@ -123,6 +123,12 @@
             </tbody>
         </table>
     </div>
+
+    @if ($collecteurs->hasPages())
+    <div class="d-flex justify-content-center mt-4">
+        {{ $collecteursw->links() }}
+    </div>
+@endif
 </div>
 
 
