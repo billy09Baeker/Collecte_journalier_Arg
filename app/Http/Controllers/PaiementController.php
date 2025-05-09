@@ -9,6 +9,7 @@ use App\Models\Notification;
 use App\Models\Recu;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Echeance;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaiementController extends Controller
 {
@@ -125,29 +126,66 @@ class PaiementController extends Controller
     }
 
 
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function getPaiementByCollecteur()
     {
-        //
+        $collecteur_id = Auth::id(); // Récupérer l'ID du collecteur connecté
+
+        // Récupérer tous les clients du système, triés par ordre alphabétique
+        $clients = Utilisateur::where('role', 'client')
+            ->orderBy('nom', 'asc')
+            ->get();
+
+        // Récupérer l'échéance unique
+        $echeance = Echeance::first();
+
+        // Récupérer tous les paiements effectués par le collecteur
+        $paiements = Paiement::where('collecteur_id', $collecteur_id)
+            ->orderBy('date_paiement', 'desc')
+            ->get();
+
+        return view('collecteur.paiements', compact('clients', 'echeance', 'paiements'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+
+
+public function storePaiementByCollecteur(Request $request)
+{
+    $request->validate([
+        'client_id' => 'required|exists:utilisateurs,id',
+        'mode_paiement' => 'required|in:espece,mobile money,virement',
+    ]);
+
+    $collecteur_id = Auth::id(); // Récupérer l'ID du collecteur connecté
+    $echeance = Echeance::first(); // Récupérer l'échéance unique
+
+    if (!$echeance) {
+        return redirect()->back()->with('error', 'Aucune échéance définie.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    // Enregistrer le paiement
+    Paiement::create([
+        'montant' => $echeance->montant_journalier,
+        'date_paiement' => now(),
+        'mode_paiement' => $request->mode_paiement,
+        'client_id' => $request->client_id,
+        'collecteur_id' => $collecteur_id,
+        'status' => 'confirmé',
+    ]);
+
+    return redirect()->route('collecteur.paiements')->with('success', 'Paiement enregistré avec succès.');
+}
+
+
+public function telechargerRecu($id)
+{
+    $paiement = Paiement::with('client')->findOrFail($id);
+
+    // Générer un reçu (par exemple, en PDF)
+    $pdf = Pdf::loadView('collecteur.recu', compact('paiement'));
+
+    return $pdf->download('recu_paiement_' . $paiement->id . '.pdf');
+}
+
+
+
 }

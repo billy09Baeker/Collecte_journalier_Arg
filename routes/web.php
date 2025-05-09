@@ -150,4 +150,15 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/collecteur/dashboard', [UtilisateurController::class, 'dashboardCollecteur'])->name('collecteur.dashboard');
+
+
+
+    Route::get('/collecteur/paiements', [PaiementController::class, 'getPaiementByCollecteur'])->name('collecteur.paiements');
+
+
+    Route::post('/collecteur/paiements/store', [PaiementController::class, 'storePaiement'])->name('collecteur.paiements.store');
+
+
+
+    Route::get('/collecteur/paiements/{id}/recu', [PaiementController::class, 'telechargerRecu'])->name('collecteur.paiements.recu');
 });

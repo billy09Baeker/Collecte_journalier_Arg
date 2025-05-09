@@ -54,10 +54,10 @@
                     <td>
                         @if($paiement->status === 'confirmé')
                             {{-- <form action="{{ route('client.paiements.confirmer', $paiement->id) }}" method="POST" style="display:inline-block;"> --}}
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-success" title="Confirmer">
-                                    <i class="bi bi-check-circle"></i> Telecharger reçu
-                                </button>
+                                
+                                <td>
+                                    <a href="{{ route('collecteur.paiements.recu', $paiement->id) }}" class="btn btn-sm btn-secondary">Télécharger Reçu</a>
+                                </td>
                             {{-- </form> --}}
                         @endif
                 </tr>

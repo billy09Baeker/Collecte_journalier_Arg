@@ -24,23 +24,21 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link active" href="{{route('admin.dashboard')}}"><i class="bi bi-speedometer2 me-1"></i> Tableau de bord</a>
+                <a class="nav-link" href=""><i class="bi bi-speedometer2 me-1"></i> Tableau de bord</a>
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.collecteurs') }}"><i class="bi bi-receipt me-1"></i> Collecteurs</a>
+                <a class="nav-link" href=""><i class="bi bi-receipt me-1"></i>Mes Collectes</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.clients') }}"><i class="bi bi-bell me-1"></i> Clients</a>
+                <a class="nav-link" href=""><i class="bi bi-bell me-1"></i>Mes Clients</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.suivi-paiements') }}"><i class="bi bi-gear me-1"></i> Transactions</a>
+                <a class="nav-link" href=""><i class="bi bi-gear me-1"></i>Mes Performances</a>
               </li>
+
               <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.performances')}}"><i class="bi bi-gear me-1"></i> Performances</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.parametres')}}"><i class="bi bi-gear me-1"></i> Paramètres</a>
+                <a class="nav-link" href=""><i class="bi bi-gear me-1"></i> Paramètres</a>
               </li>
 
               <li class="nav-item">
