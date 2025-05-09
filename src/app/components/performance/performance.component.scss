@@ -1,0 +1,181 @@
+.container {
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  h2 {
+    color: #3c4858;
+    margin-bottom: 30px;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  h3 {
+    color: #3c4858;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  
+  // Cartes des statistiques générales
+  .stats-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  
+  .stats-card {
+    flex: 1;
+    min-width: 250px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .stats-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+  }
+  
+  .money-icon {
+    background: linear-gradient(45deg, #66bb6a, #43a047);
+    color: white;
+  }
+  
+  .clients-icon {
+    background: linear-gradient(45deg, #42a5f5, #1e88e5);
+    color: white;
+  }
+  
+  .collectors-icon {
+    background: linear-gradient(45deg, #ab47bc, #8e24aa);
+    color: white;
+  }
+  
+  .stats-content {
+    h3 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+    
+    p {
+      margin: 5px 0 0;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+  }
+  
+  // Table des collecteurs
+  .collector-details {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 40px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    th {
+      background-color: #f9fafb;
+      font-weight: 500;
+      color: #5c6bc0;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+  }
+  
+  // Badges de performance
+  .badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .performance-excellente {
+    background-color: #66bb6a;
+    color: white;
+  }
+  
+  .performance-bonne {
+    background-color: #42a5f5;
+    color: white;
+  }
+  
+  .performance-moyenne {
+    background-color: #ffca28;
+    color: #333;
+  }
+  
+  .performance-faible {
+    background-color: #ef5350;
+    color: white;
+  }
+  
+  // Graphique de répartition
+  .chart-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .progress-container {
+    height: 40px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: width 0.5s ease;
+    padding: 0 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  // Responsive
+  @media (max-width: 768px) {
+    .stats-card {
+      min-width: 100%;
+    }
+    
+    .table-responsive {
+      overflow-x: auto;
+    }
+    
+    .progress-bar {
+      font-size: 0.7rem;
+    }
+  }

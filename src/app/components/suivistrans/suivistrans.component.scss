@@ -1,0 +1,65 @@
+.container {
+    padding: 20px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border-collapse: collapse;
+  }
+  
+  .table th, .table td {
+    padding: 12px;
+    vertical-align: middle;
+  }
+  
+  .badge {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    display: inline-block;
+  }
+  
+  .statut-valide {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .statut-en-cours {
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .statut-en-attente {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  
+  .statut-refuse {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .badge-success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  
+  .btn-danger {
+    padding: 5px 10px;
+    
+    fa-icon {
+      color: white;
+    }
+  }

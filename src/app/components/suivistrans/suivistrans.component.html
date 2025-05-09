@@ -1,1 +1,47 @@
-<p>suivistrans works!</p>
+<div class="container">
+    <h2>Suivi des Transactions</h2>
+    
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Montant</th>
+            <th>Bénéficiaire</th>
+            <th>Référence</th>
+            <th>Statut</th>
+            <th>Complète</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.date | date:'dd/MM/yyyy' }}</td>
+            <td>{{ transaction.montant | currency:'EUR':'symbol':'1.2-2' }}</td>
+            <td>{{ transaction.beneficiaire }}</td>
+            <td>{{ transaction.reference }}</td>
+            <td>
+              <span class="badge" [ngClass]="getStatutClass(transaction.statut)">
+                {{ transaction.statut }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="transaction.complete ? 'badge-success' : 'badge-warning'">
+                {{ transaction.complete ? 'Oui' : 'Non' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="supprimerTransaction(transaction.id)" title="Supprimer">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="transactions.length === 0">
+            <td colspan="8" class="text-center">Aucune transaction disponible</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

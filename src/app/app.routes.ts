@@ -5,6 +5,7 @@ import { GestioncollecteurComponent } from './components/gestioncollecteur/gesti
 import { GestionclientComponent } from './components/gestionclient/gestionclient.component';
 import { SuivistransComponent } from './components/suivistrans/suivistrans.component';
 import { PerformanceComponent } from './components/performance/performance.component';
+import { DashboardCollecteurComponent } from './componentCollecteur/dashboard-collecteur/dashboard-collecteur.component';
 
 export const routes: Routes = [
 { path: '', component: LoginComponent },
@@ -14,6 +15,7 @@ export const routes: Routes = [
 {path: 'gestionclient',component: GestionclientComponent},
 {path: 'suivistrans', component: SuivistransComponent},
 {path: 'performance', component: PerformanceComponent},
+{path: 'dashboardcollecteur', component: DashboardCollecteurComponent},
 
 
 ];

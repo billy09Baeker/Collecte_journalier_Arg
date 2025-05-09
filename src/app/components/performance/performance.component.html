@@ -1,1 +1,79 @@
-<p>performance works!</p>
+<div class="container">
+    <h2>Statistiques de Collecte - {{ aujourdhui | date:'dd/MM/yyyy' }}</h2>
+    
+    <!-- Résumé des statistiques journalières -->
+    <div class="stats-summary">
+      <div class="stats-card">
+        <div class="stats-icon money-icon">€</div>
+        <div class="stats-content">
+          <h3>{{ statsJour.montantTotalJour | currency:'EUR':'symbol':'1.2-2' }}</h3>
+          <p>Total collecté aujourd'hui</p>
+        </div>
+      </div>
+      
+      <div class="stats-card">
+        <div class="stats-icon clients-icon">👥</div>
+        <div class="stats-content">
+          <h3>{{ statsJour.nombreClientsTotal }}</h3>
+          <p>Clients visités</p>
+        </div>
+      </div>
+      
+      <div class="stats-card">
+        <div class="stats-icon collectors-icon">👨‍💼</div>
+        <div class="stats-content">
+          <h3>{{ statsJour.nombreCollecteurs }}</h3>
+          <p>Collecteurs actifs</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Détails par collecteur -->
+    <div class="collector-details">
+      <h3>Performance des collecteurs</h3>
+      
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Collecteur</th>
+              <th>Zone</th>
+              <th>Montant collecté</th>
+              <th>Clients</th>
+              <th>Moyenne par client</th>
+              <th>Contribution</th>
+              <th>Performance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let collecteur of collecteurs">
+              <td>{{ collecteur.prenom }} {{ collecteur.nom }}</td>
+              <td>{{ collecteur.zoneCouverture }}</td>
+              <td>{{ collecteur.montantTotal | currency:'EUR':'symbol':'1.2-2' }}</td>
+              <td>{{ collecteur.nombreClients }}</td>
+              <td>{{ calculerMoyenneParClient(collecteur) | currency:'EUR':'symbol':'1.2-2' }}</td>
+              <td>{{ calculerPourcentageContribution(collecteur) | number:'1.1-1' }}%</td>
+              <td>
+                <span class="badge" [ngClass]="getPerformanceClass(collecteur.performance)">
+                  {{ collecteur.performance | titlecase }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Graphique de répartition (à implémenter avec une librairie comme Chart.js) -->
+    <div class="chart-container">
+      <h3>Répartition des collectes par collecteur</h3>
+      <div class="progress-container">
+        <div *ngFor="let collecteur of collecteurs" 
+             class="progress-bar" 
+             [ngClass]="getPerformanceClass(collecteur.performance)"
+             [ngStyle]="{'width': calculerPourcentageContribution(collecteur) + '%'}">
+          {{ collecteur.prenom }} ({{ calculerPourcentageContribution(collecteur) | number:'1.0-0' }}%)
+        </div>
+      </div>
+    </div>
+  </div>
