@@ -1,0 +1,123 @@
+<!-- login.component.html -->
+<div class="login-container">
+    <div class="login-card">
+      <h1 class="login-title">Connexion</h1>
+      
+      <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            formControlName="email" 
+            type="email" 
+            id="email" 
+            class="form-control" 
+            placeholder="Entrez votre email" 
+            required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input 
+            formControlName="password" 
+            type="password" 
+            id="password" 
+            class="form-control" 
+            placeholder="Entrez votre mot de passe" 
+            required>
+        </div>
+        
+        <button type="submit" routerLink = 'dashboard' class="login-button">Se connecter</button>
+      </form>
+      
+      <div class="signup-link">
+        <span>Vous n'avez pas de compte ? </span>
+        <a routerLink="/register">Inscrivez-vous</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add this to your login.component.scss file -->
+  <style>
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-title {
+    font-size: 36px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .form-control::placeholder {
+    color: #6c757d;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    background-color: #3086F1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .login-button:hover {
+    background-color: #2474db;
+  }
+  
+  .signup-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .signup-link a {
+    color: #3086F1;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+  </style>

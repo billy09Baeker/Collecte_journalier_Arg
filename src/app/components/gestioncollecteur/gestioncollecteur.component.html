@@ -1,0 +1,426 @@
+<style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    main {
+      background-color: #f5f3f3;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .navbar {
+      display: flex;
+      align-items: center;
+      background-color: #2152b9;
+      padding: 15px 20px;
+      color: white;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      margin-right: 40px;
+    }
+    
+    .nav-links {
+      display: flex;
+      flex-grow: 1;
+    }
+    
+    .nav-link {
+      margin-right: 20px;
+      color: #ddd;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logout {
+      color: #f8bf40;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+  
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+  
+    h1 {
+      color: #333;
+      font-size: 2rem;
+    }
+  
+    .add-button {
+      background-color: #3d7a3d;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  
+    .table-container {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+  
+    .collecteurs-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    .collecteurs-table th {
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  
+    .collecteurs-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+    }
+  
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+  
+    .btn-edit {
+      background-color: #f0ad4e;
+      border: none;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .btn-delete {
+      background-color: #f5f5f5;
+      border: none;
+      color: #d9534f;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    /* Modal styles */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+  
+    .modal {
+      background-color: white;
+      border-radius: 5px;
+      width: 500px;
+      max-width: 90%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+  
+    .modal-header {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+  
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+  
+    .modal-body {
+      padding: 15px;
+    }
+  
+    .form-group {
+      margin-bottom: 15px;
+    }
+  
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
+    }
+  
+    .form-control {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  
+    .modal-footer {
+      padding: 15px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+  
+    .btn {
+      padding: 8px 15px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+  
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+  
+    .btn-primary {
+      background-color: #2152b9;
+      color: white;
+    }
+  
+    .btn-danger {
+      background-color: #d9534f;
+      color: white;
+    }
+  
+    .error-message {
+      color: #d9534f;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+  </style>
+  
+  <nav class="navbar">
+    <div class="logo">
+      <span>📁 MaCollecte</span>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/" class="nav-link">📊 Tableau de bord</a>
+      <a routerLink="/collectes" class="nav-link">📑 Collectes</a>
+      <a routerLink="/clients" class="nav-link">👤 Clients</a>
+      <a routerLink="/paiements" class="nav-link">💰 Paiements</a>
+    </div>
+    <a routerLink="/logout" class="logout">🔓 Déconnexion</a>
+  </nav>
+  
+  <main>
+    <div class="header-section">
+      <h1>Gestion des Collecteurs</h1>
+      <button class="add-button" (click)="openAddModal()">
+        <span>🕒</span> Ajouter un collecteur
+      </button>
+    </div>
+    
+    <div class="table-container">
+      <table class="collecteurs-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Sexe</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let collecteur of collecteurs">
+            <td>{{ collecteur.nom }}</td>
+            <td>{{ collecteur.prenom }}</td>
+            <td>{{ collecteur.sexe }}</td>
+            <td>{{ collecteur.email }}</td>
+            <td>{{ collecteur.telephone }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-edit" (click)="openEditModal(collecteur)">
+                  <span>✏️</span>
+                </button>
+                <button class="btn-delete" (click)="openDeleteModal(collecteur)">
+                  <span>🗑️</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  
+  <!-- Add Collecteur Modal -->
+  <div class="modal-backdrop" *ngIf="showAddModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Ajouter un collecteur</h2>
+        <button class="close-button" (click)="closeModals()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="collecteurForm">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" class="form-control" formControlName="nom">
+            <div class="error-message" *ngIf="collecteurForm.get('nom')?.invalid && collecteurForm.get('nom')?.touched">
+              Le nom est requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" class="form-control" formControlName="prenom">
+            <div class="error-message" *ngIf="collecteurForm.get('prenom')?.invalid && collecteurForm.get('prenom')?.touched">
+              Le prénom est requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="sexe">Sexe</label>
+            <select id="sexe" class="form-control" formControlName="sexe">
+              <option value="">Sélectionner</option>
+              <option value="Masculin">Masculin</option>
+              <option value="Féminin">Féminin</option>
+            </select>
+            <div class="error-message" *ngIf="collecteurForm.get('sexe')?.invalid && collecteurForm.get('sexe')?.touched">
+              Le sexe est requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form-control" formControlName="email">
+            <div class="error-message" *ngIf="collecteurForm.get('email')?.hasError('required') && collecteurForm.get('email')?.touched">
+              L'email est requis
+            </div>
+            <div class="error-message" *ngIf="collecteurForm.get('email')?.hasError('email') && collecteurForm.get('email')?.touched">
+              Format d'email invalide
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="telephone">Téléphone</label>
+            <input type="text" id="telephone" class="form-control" formControlName="telephone">
+            <div class="error-message" *ngIf="collecteurForm.get('telephone')?.invalid && collecteurForm.get('telephone')?.touched">
+              Le téléphone est requis
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+        <button class="btn btn-primary" (click)="addCollecteur()" [disabled]="collecteurForm.invalid">Ajouter</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Edit Collecteur Modal -->
+  <div class="modal-backdrop" *ngIf="showEditModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Modifier le collecteur</h2>
+        <button class="close-button" (click)="closeModals()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="collecteurForm">
+          <div class="form-group">
+            <label for="edit-nom">Nom</label>
+            <input type="text" id="edit-nom" class="form-control" formControlName="nom">
+            <div class="error-message" *ngIf="collecteurForm.get('nom')?.invalid && collecteurForm.get('nom')?.touched">
+              Le nom est requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-prenom">Prénom</label>
+            <input type="text" id="edit-prenom" class="form-control" formControlName="prenom">
+            <div class="error-message" *ngIf="collecteurForm.get('prenom')?.invalid && collecteurForm.get('prenom')?.touched">
+              Le prénom est requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-sexe">Sexe</label>
+            <select id="edit-sexe" class="form-control" formControlName="sexe">
+              <option value="">Sélectionner</option>
+              <option value="Masculin">Masculin</option>
+              <option value="Féminin">Féminin</option>
+            </select>
+            <div class="error-message" *ngIf="collecteurForm.get('sexe')?.invalid && collecteurForm.get('sexe')?.touched">
+              Le sexe est requis
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-email">Email</label>
+            <input type="email" id="edit-email" class="form-control" formControlName="email">
+            <div class="error-message" *ngIf="collecteurForm.get('email')?.hasError('required') && collecteurForm.get('email')?.touched">
+              L'email est requis
+            </div>
+            <div class="error-message" *ngIf="collecteurForm.get('email')?.hasError('email') && collecteurForm.get('email')?.touched">
+              Format d'email invalide
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-telephone">Téléphone</label>
+            <input type="text" id="edit-telephone" class="form-control" formControlName="telephone">
+            <div class="error-message" *ngIf="collecteurForm.get('telephone')?.invalid && collecteurForm.get('telephone')?.touched">
+              Le téléphone est requis
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+        <button class="btn btn-primary" (click)="updateCollecteur()" [disabled]="collecteurForm.invalid">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Delete Collecteur Modal -->
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Confirmer la suppression</h2>
+        <button class="close-button" (click)="closeModals()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûr de vouloir supprimer le collecteur {{ currentCollecteur?.prenom }} {{ currentCollecteur?.nom }} ?</p>
+        <p>Cette action est irréversible.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+        <button class="btn btn-danger" (click)="deleteCollecteur()">Supprimer</button>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,107 @@
+// Main styles
+main {
+    background-color: #f5f3f3;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  // Navbar styles
+  .navbar {
+    display: flex;
+    align-items: center;
+    background-color: #2152b9;
+    padding: 15px 20px;
+    color: white;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    margin-right: 40px;
+  }
+  
+  .nav-links {
+    display: flex;
+    flex-grow: 1;
+  }
+  
+  .nav-link {
+    margin-right: 20px;
+    color: #ddd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logout {
+    color: #f8bf40;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  // Header section
+  .header-section {
+    padding: 20px 0;
+    
+    h1 {
+      color: #333;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+  }
+  
+  // Table styles
+  .table-container {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .clients-table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    th {
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+    }
+  }
+  
+  // Button styles
+  .btn-details {
+    background-color: #f0f0f0;
+    border: none;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+  
+  .btn-delete {
+    background-color: #f0f0f0;
+    border: none;
+    color: #d9534f;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
