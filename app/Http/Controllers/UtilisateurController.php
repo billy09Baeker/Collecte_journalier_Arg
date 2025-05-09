@@ -302,4 +302,84 @@ public function updateCollecteur(Request $request, $id)
 
         return view('collecteur.dashboard', compact('clients'));
     }
+
+
+    public function storeClient(Request $request)
+    {
+
+        $user_id = Auth::id(); // Utiliser l'ID de l'utilisateur connecté via Auth
+    // Validation des données du formulaire
+    $validated = $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenom' => 'required|string|max:255',
+        'date_naissance' => 'required|date',
+        'lieu_naissance' => 'required|string|max:255',
+        'sexe' => 'required|in:masculin,féminin',
+        'email' => 'required|email|unique:users,email',
+        'telephone' => 'required|string|max:15',
+        'adresse' => 'required|string|max:255',
+        'password' => 'required|string|min:8', // Si tu veux confirmation
+    ]);
+
+    // Création de l'utilisateur avec rôle collecteur
+    $user = Utilisateur::create([
+        'nom' => $validated['nom'],
+        'prenom' => $validated['prenom'],
+        'date_naissance' => $validated['date_naissance'],
+        'lieu_naissance' => $validated['lieu_naissance'],
+        'sexe' => $validated['sexe'],
+        'email' => $validated['email'],
+        'telephone' => $validated['telephone'],
+        'adresse' => $validated['adresse'],
+        'password' => $validated['password'],
+        'role' => 'client', // Si tu as une colonne "role" simple
+        'added_by' => session('user_id'), // ID de l'utilisateur connecté
+    ]);
+
+    return redirect()->route('collecteur.clients')->with('success', 'Client ajouté avec succès.');
+}
+
+public function getClient()
+    {
+        $clients = Utilisateur::where('role', 'client')->get();
+        return view('collecteur.clients', compact('clients'));
+    }
+
+
+    public function updateClient(Request $request, $id)
+    {
+        $client = Utilisateur::where('role', 'collecteur')->findOrFail($id);
+
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'date_naissance' => 'required|date',
+            'lieu_naissance' => 'required|string|max:255',
+            'sexe' => 'required|in:masculin,féminin',
+            'email' => 'required|email|unique:users,email,' . $client->id,
+            'telephone' => 'required|string|max:15' . $client->id,
+            'adresse' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8', // Facultatif : mot de passe uniquement si rempli
+        ]);
+
+        // Mise à jour des champs
+        $client->nom = $validated['nom'];
+        $client->prenom = $validated['prenom'];
+        $client->date_naissance = $validated['date_naissance'];
+        $client->lieu_naissance = $validated['lieu_naissance'];
+        $client->sexe = $validated['sexe'];
+        $client->email = $validated['email'];
+        $client->telephone = $validated['telephone'];
+        $client->adresse = $validated['adresse'] ?? null;
+
+        // Mise à jour du mot de passe uniquement si fourni
+        if (!empty($validated['password'])) {
+            $client->password = $validated['password'];
+        }
+
+        $client->save();
+
+        return redirect()->route('admin.collecteurs')->with('success', 'Client mis à jour avec succès.');
+    }
+
 }

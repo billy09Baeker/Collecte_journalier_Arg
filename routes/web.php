@@ -161,4 +161,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/collecteur/paiements/{id}/recu', [PaiementController::class, 'telechargerRecu'])->name('collecteur.paiements.recu');
+
+
+    Route::get('/collecteur/clients', [UtilisateurController::class, 'getClient'])->name('collecteur.clients');
+
+
+
+
+    Route::post('/collecteur/clients/store', [UtilisateurController::class, 'storeClient'])->name('collecteur.client.store');
+
+    Route::put('/collecteur/clients/add/{id}', [UtilisateurController::class, 'updateClient'])->name('collecteur.client.update');
 });

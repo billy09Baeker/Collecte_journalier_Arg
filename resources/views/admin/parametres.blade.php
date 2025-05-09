@@ -12,8 +12,17 @@
         <div class="card-body">
             <h5 class="card-title">Informations sur l'Échéance</h5>
             <p><strong>Montant Journalier :</strong> {{ number_format($echeance->montant_journalier, 2, ',', ' ') }} FCFA</p>
-            <p><strong>Date de Paiement :</strong> {{ $echeance->date_paiement ?? 'Non défini' }}</p>
-            <p><strong>Date d'Échéance :</strong> {{ $echeance->date_echeance }}</p>
+            <p><strong>Date de Paiement :</strong>
+                {{ $echeance->date_paiement
+                    ? \Carbon\Carbon::parse($echeance->date_paiement)->translatedFormat('d F Y')
+                    : 'Non défini' }}
+            </p>
+
+            <p><strong>Date d'Échéance :</strong>
+                {{ $echeance->date_echeance
+                    ? \Carbon\Carbon::parse($echeance->date_echeance)->translatedFormat('d F Y')
+                    : 'Non définie' }}
+            </p>
             <p><strong>Mode de Paiement 1 :</strong> {{ $echeance->mode_paiement_1 ?? 'Non défini' }}</p>
             <p><strong>QR Code 1 :</strong>
                 @if($echeance->qr_code_1)
@@ -52,8 +61,8 @@
                             <input type="number" class="form-control" id="montant_journalier" name="montant_journalier" value="{{ $echeance->montant_journalier }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="date_echeance" class="form-label">Date de Paiement</label>
-                            <input type="date" class="form-control" id="date_echeance" name="date_echeance" value="{{ $echeance->date_paiement }}" required>
+                            <label for="date_paiement" class="form-label">Date de Paiement</label>
+                            <input type="date" class="form-control" id="date_paiement" name="date_paiement" value="{{ $echeance->date_paiement }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="date_echeance" class="form-label">Date d'Échéance</label>
